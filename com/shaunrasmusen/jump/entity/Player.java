@@ -36,8 +36,7 @@ public class Player {
 	private int hits = 0;
 	private int counter = 0;
 	private int noclipWait = 30;
-	private int completeCount = 0;
-	private int anim;
+	private int anim, idleTime;
 	private boolean charge = false;
 	private boolean walking = false;
 	private boolean lava = false;
@@ -71,19 +70,19 @@ public class Player {
 				effect.lavaDamageTimer--;
 			}
 			
-			if (effect.sightTimer == 0) {
+			if (effect.sightTimer == 0)
 				effect.sightDist = 0;
-			} else {
+			
+			if (effect.sightDist > 0)
 				effect.sightTimer--;
-			}
 			
 			if (Jump.level.blindness) {
-				for (int a = 1; a < ((y1 - effect.sightDist) >> 4); a++) {
+				for (int a = 1; a < (y1 >> 4) - effect.sightDist; a++) {
 					for (int b = 2; b < Jump.level.width; b++) {
 						Jump.level.setTileVal(b, a, 1.0);
 					}
 				}
-				for (int a = 2; a < ((((x0 + x1) / 2) - effect.sightDist) >> 4); a++) {
+				for (int a = 2; a < (((x0 + x1) / 2) >> 4) - effect.sightDist; a++) {
 					for (int b = 1; b < Jump.level.height; b++) {
 						Jump.level.setTileVal(a, b, 1.0);
 					}
@@ -258,19 +257,29 @@ public class Player {
 			if (lava) sprite = Sprite.lplayerf;
 			else
 				sprite = Sprite.playerf;
+			
+			if (anim % 150 > 75 && idleTime > 150) {
+				if (lava) sprite = Sprite.lplayerfw;
+				else
+					sprite = Sprite.playerfw;
+			}
+			
+			idleTime++;
+			
 			if (walking) {
+				idleTime = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerf1;
 					else
 						sprite = Sprite.playerf1;
 				} else if (anim % 40 > 20) {
-					if (lava) sprite = Sprite.lplayerf;
-					else
-						sprite = Sprite.playerf;
-				} else if (anim % 40 > 10) {
 					if (lava) sprite = Sprite.lplayerf2;
 					else
 						sprite = Sprite.playerf2;
+				} else if (anim % 40 > 10) {
+					if (lava) sprite = Sprite.lplayerf3;
+					else
+						sprite = Sprite.playerf3;
 				} else {
 					if (lava) sprite = Sprite.lplayerf;
 					else
@@ -289,19 +298,29 @@ public class Player {
 			if (lava) sprite = Sprite.lplayerr;
 			else
 				sprite = Sprite.playerr;
+			
+			if (anim % 150 > 75 && idleTime > 150) {
+				if (lava) sprite = Sprite.lplayerrw;
+				else
+					sprite = Sprite.playerrw;
+			}
+			
+			idleTime++;
+			
 			if (walking) {
+				idleTime = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerr1;
 					else
 						sprite = Sprite.playerr1;
 				} else if (anim % 40 > 20) {
-					if (lava) sprite = Sprite.lplayerr;
-					else
-						sprite = Sprite.playerr;
-				} else if (anim % 40 > 10) {
 					if (lava) sprite = Sprite.lplayerr2;
 					else
 						sprite = Sprite.playerr2;
+				} else if (anim % 40 > 10) {
+					if (lava) sprite = Sprite.lplayerr3;
+					else
+						sprite = Sprite.playerr3;
 				} else {
 					if (lava) sprite = Sprite.lplayerr;
 					else
@@ -320,19 +339,29 @@ public class Player {
 			if (lava) sprite = Sprite.lplayerb;
 			else
 				sprite = Sprite.playerb;
+			
+			if (anim % 150 > 75 && idleTime > 150) {
+				if (lava) sprite = Sprite.lplayerbw;
+				else
+					sprite = Sprite.playerbw;
+			}
+			
+			idleTime++;
+			
 			if (walking) {
+				idleTime = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerb1;
 					else
 						sprite = Sprite.playerb1;
 				} else if (anim % 40 > 20) {
-					if (lava) sprite = Sprite.lplayerb;
-					else
-						sprite = Sprite.playerb;
-				} else if (anim % 40 > 10) {
 					if (lava) sprite = Sprite.lplayerb2;
 					else
 						sprite = Sprite.playerb2;
+				} else if (anim % 40 > 10) {
+					if (lava) sprite = Sprite.lplayerb3;
+					else
+						sprite = Sprite.playerb3;
 				} else {
 					if (lava) sprite = Sprite.lplayerb;
 					else
@@ -351,19 +380,29 @@ public class Player {
 			if (lava) sprite = Sprite.lplayerl;
 			else
 				sprite = Sprite.playerl;
+			
+			if (anim % 150 > 75 && idleTime > 150) {
+				if (lava) sprite = Sprite.lplayerlw;
+				else
+					sprite = Sprite.playerlw;
+			}
+			
+			idleTime++;
+			
 			if (walking) {
+				idleTime = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerl1;
 					else
 						sprite = Sprite.playerl1;
 				} else if (anim % 40 > 20) {
-					if (lava) sprite = Sprite.lplayerl;
-					else
-						sprite = Sprite.playerl;
-				} else if (anim % 40 > 10) {
 					if (lava) sprite = Sprite.lplayerl2;
 					else
 						sprite = Sprite.playerl2;
+				} else if (anim % 40 > 10) {
+					if (lava) sprite = Sprite.lplayerl3;
+					else
+						sprite = Sprite.playerl3;
 				} else {
 					if (lava) sprite = Sprite.lplayerl;
 					else
@@ -465,10 +504,8 @@ public class Player {
 		}
 
 		// Goal Platform
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.1
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.1) {
-			completeCount++;
-			if (completeCount % 30 == 0) {
+		if ((Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.1
+				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.1) && input.tp) {
 				complete = true;
 				if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 3.0);
 				else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 3.0);
@@ -478,7 +515,6 @@ public class Player {
 				teleportAnim();
 
 				calcScore();
-			}
 		}
 
 		// Health Tiles
@@ -622,7 +658,12 @@ public class Player {
 			if (inventory[i] == 5.1) Sprite.fire1.renderSprite(4, (i + 10) * 16 + 4, 0);
 			if (inventory[i] == 5.2) Sprite.fire2.renderSprite(4, (i + 10) * 16 + 4, 0);
 			if (inventory[i] == 6.0) Sprite.sight.renderSprite(4, (i + 10) * 16 + 4, 0);
-			if (inventory[i] == 6.1) Sprite.sight.renderSprite(4, (i + 10) * 16 + 4, 0);
+			Graphics.halfScale();
+			if (inventory[i] == 6.1) {
+				Sprite.sight.renderSprite(4, (i + 10) * 24 + 8, 0);
+				Sprite.sight.renderSprite(12, (i + 10) * 24 + 8, 0);
+			}
+			Graphics.fullScale();
 		}
 	}
 

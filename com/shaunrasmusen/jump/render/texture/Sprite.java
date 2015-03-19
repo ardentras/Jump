@@ -9,54 +9,74 @@ public class Sprite {
 	public double x, y, width, height;
 	public SpriteSheet sheet;
 	
-	public static Sprite playerf = new Sprite(0, 13, 16, 16, "player");
-	public static Sprite playerb = new Sprite(2, 13, 16, 16, "player");
-	public static Sprite playerl = new Sprite(3, 13, 16, 16, "player");
-	public static Sprite playerr = new Sprite(1, 13, 16, 16, "player");
+	public static Sprite playerf = new Sprite(0, 12, 16, 16, "player");
+	public static Sprite playerb = new Sprite(2, 12, 16, 16, "player");
+	public static Sprite playerl = new Sprite(3, 12, 16, 16, "player");
+	public static Sprite playerr = new Sprite(1, 12, 16, 16, "player");
 
-	public static Sprite playerf1 = new Sprite(0, 14, 16, 16, "player");
-	public static Sprite playerb1 = new Sprite(2, 14, 16, 16, "player");
-	public static Sprite playerl1 = new Sprite(3, 14, 16, 16, "player");
-	public static Sprite playerr1 = new Sprite(1, 14, 16, 16, "player");
-
-	public static Sprite playerf2 = new Sprite(0, 15, 16, 16, "player");
-	public static Sprite playerb2 = new Sprite(2, 15, 16, 16, "player");
-	public static Sprite playerl2 = new Sprite(3, 15, 16, 16, "player");
-	public static Sprite playerr2 = new Sprite(1, 15, 16, 16, "player");
+	public static Sprite playerf1 = new Sprite(0, 13, 16, 16, "player");
+	public static Sprite playerb1 = new Sprite(2, 13, 16, 16, "player");
+	public static Sprite playerl1 = new Sprite(3, 13, 16, 16, "player");
+	public static Sprite playerr1 = new Sprite(1, 13, 16, 16, "player");
 	
-	public static Sprite lplayerf = new Sprite(4, 13, 16, 16, "player");
-	public static Sprite lplayerb = new Sprite(6, 13, 16, 16, "player");
-	public static Sprite lplayerl = new Sprite(7, 13, 16, 16, "player");
-	public static Sprite lplayerr = new Sprite(5, 13, 16, 16, "player");
+	public static Sprite playerf2 = new Sprite(0, 14, 16, 16, "player");
+	public static Sprite playerb2 = new Sprite(2, 14, 16, 16, "player");
+	public static Sprite playerl2 = new Sprite(3, 14, 16, 16, "player");
+	public static Sprite playerr2 = new Sprite(1, 14, 16, 16, "player");
 
-	public static Sprite lplayerf1 = new Sprite(4, 14, 16, 16, "player");
-	public static Sprite lplayerb1 = new Sprite(6, 14, 16, 16, "player");
-	public static Sprite lplayerl1 = new Sprite(7, 14, 16, 16, "player");
-	public static Sprite lplayerr1 = new Sprite(5, 14, 16, 16, "player");
-
-	public static Sprite lplayerf2 = new Sprite(4, 15, 16, 16, "player");
-	public static Sprite lplayerb2 = new Sprite(6, 15, 16, 16, "player");
-	public static Sprite lplayerl2 = new Sprite(7, 15, 16, 16, "player");
-	public static Sprite lplayerr2 = new Sprite(5, 15, 16, 16, "player");
-
-	public static Sprite playerfc = new Sprite(0, 12, 16, 16, "player");
-	public static Sprite playerbc = new Sprite(2, 12, 16, 16, "player");
-	public static Sprite playerlc = new Sprite(3, 12, 16, 16, "player");
-	public static Sprite playerrc = new Sprite(1, 12, 16, 16, "player");
-
-	public static Sprite playerfce = new Sprite(0, 11, 16, 16, "player");
-	public static Sprite playerbce = new Sprite(2, 11, 16, 16, "player");
-	public static Sprite playerlce = new Sprite(3, 11, 16, 16, "player");
-	public static Sprite playerrce = new Sprite(1, 11, 16, 16, "player");
+	public static Sprite playerf3 = new Sprite(0, 15, 16, 16, "player");
+	public static Sprite playerb3 = new Sprite(2, 15, 16, 16, "player");
+	public static Sprite playerl3 = new Sprite(3, 15, 16, 16, "player");
+	public static Sprite playerr3 = new Sprite(1, 15, 16, 16, "player");
 	
-	public static Sprite playertp0 = new Sprite(4, 12, 16, 16, "player");
-	public static Sprite playertp1 = new Sprite(5, 12, 16, 16, "player");
-	public static Sprite playertp2 = new Sprite(6, 12, 16, 16, "player");
-	public static Sprite playertp3 = new Sprite(7, 12, 16, 16, "player");
-	public static Sprite playertp4 = new Sprite(7, 11, 16, 16, "player");
-	public static Sprite playertp5 = new Sprite(6, 11, 16, 16, "player");
-	public static Sprite playertp6 = new Sprite(5, 11, 16, 16, "player");
-	public static Sprite playertp7 = new Sprite(4, 11, 16, 16, "player");
+	public static Sprite playerfw = new Sprite(8, 12, 16, 16, "player");
+	public static Sprite playerbw = new Sprite(10, 12, 16, 16, "player");
+	public static Sprite playerlw = new Sprite(11, 12, 16, 16, "player");
+	public static Sprite playerrw = new Sprite(9, 12, 16, 16, "player");
+	
+	public static Sprite lplayerf = new Sprite(4, 12, 16, 16, "player");
+	public static Sprite lplayerb = new Sprite(6, 12, 16, 16, "player");
+	public static Sprite lplayerl = new Sprite(7, 12, 16, 16, "player");
+	public static Sprite lplayerr = new Sprite(5, 12, 16, 16, "player");
+
+	public static Sprite lplayerf1 = new Sprite(4, 13, 16, 16, "player");
+	public static Sprite lplayerb1 = new Sprite(6, 13, 16, 16, "player");
+	public static Sprite lplayerl1 = new Sprite(7, 13, 16, 16, "player");
+	public static Sprite lplayerr1 = new Sprite(5, 13, 16, 16, "player");
+	
+	public static Sprite lplayerf2 = new Sprite(4, 14, 16, 16, "player");
+	public static Sprite lplayerb2 = new Sprite(6, 14, 16, 16, "player");
+	public static Sprite lplayerl2 = new Sprite(7, 14, 16, 16, "player");
+	public static Sprite lplayerr2 = new Sprite(5, 14, 16, 16, "player");
+
+	public static Sprite lplayerf3 = new Sprite(4, 15, 16, 16, "player");
+	public static Sprite lplayerb3 = new Sprite(6, 15, 16, 16, "player");
+	public static Sprite lplayerl3 = new Sprite(7, 15, 16, 16, "player");
+	public static Sprite lplayerr3 = new Sprite(5, 15, 16, 16, "player");
+	
+	public static Sprite lplayerfw = new Sprite(12, 12, 16, 16, "player");
+	public static Sprite lplayerbw = new Sprite(14, 12, 16, 16, "player");
+	public static Sprite lplayerlw = new Sprite(15, 12, 16, 16, "player");
+	public static Sprite lplayerrw = new Sprite(13, 12, 16, 16, "player");
+
+	public static Sprite playerfc = new Sprite(0, 11, 16, 16, "player");
+	public static Sprite playerbc = new Sprite(2, 11, 16, 16, "player");
+	public static Sprite playerlc = new Sprite(3, 11, 16, 16, "player");
+	public static Sprite playerrc = new Sprite(1, 11, 16, 16, "player");
+
+	public static Sprite playerfce = new Sprite(0, 10, 16, 16, "player");
+	public static Sprite playerbce = new Sprite(2, 10, 16, 16, "player");
+	public static Sprite playerlce = new Sprite(3, 10, 16, 16, "player");
+	public static Sprite playerrce = new Sprite(1, 10, 16, 16, "player");
+	
+	public static Sprite playertp0 = new Sprite(4, 11, 16, 16, "player");
+	public static Sprite playertp1 = new Sprite(5, 11, 16, 16, "player");
+	public static Sprite playertp2 = new Sprite(6, 11, 16, 16, "player");
+	public static Sprite playertp3 = new Sprite(7, 11, 16, 16, "player");
+	public static Sprite playertp4 = new Sprite(7, 10, 16, 16, "player");
+	public static Sprite playertp5 = new Sprite(6, 10, 16, 16, "player");
+	public static Sprite playertp6 = new Sprite(5, 10, 16, 16, "player");
+	public static Sprite playertp7 = new Sprite(4, 10, 16, 16, "player");
 	
 	// Shop Sprites
 	

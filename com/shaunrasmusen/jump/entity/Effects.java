@@ -13,36 +13,41 @@ public class Effects {
 	 */
 	
 	public int lavaDamageTimer = 0, sightTimer = 0;
-	public int sightDist = 0;
+	public int sightDist = 0, usingSight = 0;
+	private int keyWait = 0;
+	public boolean runningSight = false;
 	public boolean voidAvoid = false;
 	
 	public Effects() {	
 	}
 	
 	public void tick() {
-		if (voidAvoid) Sprite.jetpack.renderSprite(1, 20, 0);
+		keyWait++;
+		if (voidAvoid) Sprite.jetpack.renderSprite(1, 10 * 2, 0);
 		if (Jump.player.lavaDamage == 0.5) {
-			Sprite.fire0.renderSprite(1, 30, 0);
+			Sprite.fire0.renderSprite(1, 10 * 3, 0);
 			Graphics.noScale();
-			Graphics.fontsmall.drawString(28, 31 * 3, Integer.toString(lavaDamageTimer / 60));
+			Graphics.fontsmall.drawString(28, 30 * 3 - 1, Integer.toString(lavaDamageTimer / 60));
 			Graphics.fullScale();
 		}
 		if (Jump.player.lavaDamage == 0.25) {
-			Sprite.fire1.renderSprite(1, 30, 0);
+			Sprite.fire1.renderSprite(1, 10 * 3, 0);
 			Graphics.noScale();
-			Graphics.fontsmall.drawString(28, 31 * 3, Integer.toString(lavaDamageTimer / 60));
+			Graphics.fontsmall.drawString(28, 30 * 3 - 1, Integer.toString(lavaDamageTimer / 60));
 			Graphics.fullScale();
 		}
 		if (Jump.player.lavaDamage == 0) {
-			Sprite.fire2.renderSprite(1, 30, 0);
+			Sprite.fire2.renderSprite(1, 10 * 3, 0);
 			Graphics.noScale();
-			Graphics.fontsmall.drawString(28, 31 * 3, Integer.toString(lavaDamageTimer / 60));
+			Graphics.fontsmall.drawString(28, 30 * 3 - 1, Integer.toString(lavaDamageTimer / 60));
 			Graphics.fullScale();
 		}
-		if (sightDist > 0) {
-			Sprite.sight.renderSprite(1, 40, 0);
+		if (sightTimer > 0) {
+			Sprite.sight.renderSprite(1, 10 * 4, 0);
 			Graphics.noScale();
-			Graphics.fontsmall.drawString(28, 41 * 3, Integer.toString(sightTimer / 60));
+			if (sightDist > 0)
+				Graphics.fonttiny.drawString(32, 30 * 4 - 8, "x" + sightDist);
+			Graphics.fontsmall.drawString(28, 30 * 4 + 4, Integer.toString(sightTimer / 60));
 			Graphics.fullScale();
 		}
 	}
@@ -65,16 +70,36 @@ public class Effects {
 			Jump.player.lavaDamage = 0;
 			lavaDamageTimer = 30 * 60;
 		}
-		if (e == 6.0) {
-			sightDist = 1;
-			sightTimer = 30 * 60;
+		if (sightDist == 0 && sightTimer == 0 && keyWait > 10) {
+			if (e == 6.0) {
+				sightDist = 1;
+				sightTimer = 30 * 60;
+				usingSight = i;
+			}
+			if (e == 6.1) {
+				sightDist = 3;
+				sightTimer = 30 * 60;
+				usingSight = i;
+			}
+			keyWait = 0;
 		}
-		if (e == 6.1) {
-			sightDist = 3;
-			sightTimer = 30 * 60;
+		if ((e == 6.0 || e == 6.1) && sightDist > 0 && keyWait > 10) {
+			sightDist = 0;
+			keyWait = 0;
+		}
+		if (keyWait > 10) {
+			if (e == 6.0) {
+				sightDist = 1;
+			}
+			if (e == 6.1) {
+				sightDist = 3;
+			}
+			keyWait = 0;
 		}
 		
-		Jump.player.inventory[i] = 0;
+		if (e != 6.0 && e != 6.1)
+			Jump.player.inventory[i] = 0;
+		
 //		for (int j = 0; j < Jump.player.inventory.length - 1; j++) {
 //			if (Jump.player.inventory[j] == 0) {
 //				Jump.player.inventory[j] = Jump.player.inventory[j + 1];

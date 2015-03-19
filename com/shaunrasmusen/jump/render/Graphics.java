@@ -321,7 +321,7 @@ public class Graphics {
 			}
 			if (i == 6.1) {
 				fontsmall.drawString(100, 720, "Advanced Sight Enhancement");
-				fonttiny.drawString(100, 740, "100cr");
+				fonttiny.drawString(100, 740, "300cr");
 				fonttiny.drawString(100, 756, "Enhances sight distance by three tile when effected by blindness.");
 				fonttiny.drawString(100, 772, "Can be activated and deactivated at any time over 30 seconds.");
 			}
