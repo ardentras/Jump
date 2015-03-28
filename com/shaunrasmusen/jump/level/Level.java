@@ -275,10 +275,10 @@ public class Level {
 				if (shopSprite[i] == 5.0) Sprite.fire0.renderSprite(x, y, 0);
 				if (shopSprite[i] == 5.1) Sprite.fire1.renderSprite(x, y, 0);
 				if (shopSprite[i] == 5.2) Sprite.fire2.renderSprite(x, y, 0);
-				if (shopSprite[i] == 6.0) Sprite.sight.renderSprite(x, y, 0);
+				if (shopSprite[i] == 6.0) Sprite.gravity.renderSprite(x, y, 0);
 				if (shopSprite[i] == 6.1) {
-					Sprite.heart.renderSprite(x - 4, y, 0);
-					Sprite.heart.renderSprite(x + 4, y, 0);
+					Sprite.gravity.renderSprite(x - 4, y, 0);
+					Sprite.gravity.renderSprite(x + 4, y, 0);
 				}
 				if (shopSprite[i] == 7.0) Sprite.chevron.renderSprite(x, y, 0);
 				if (shopSprite[i] == 8.0) Sprite.nanobots0.renderSprite(x, y, 0);

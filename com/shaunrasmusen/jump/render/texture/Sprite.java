@@ -111,7 +111,7 @@ public class Sprite {
 	public static Sprite info = new Sprite(1, 1, 8, 8, "sprites");
 	public static Sprite coin = new Sprite(0, 0, 8, 8, "sprites");
 	
-	public static Sprite sight = new Sprite(0, 4, 8, 8, "sprites");
+	public static Sprite gravity = new Sprite(0, 4, 8, 8, "sprites");
 	public static Sprite chevron = new Sprite(1, 4, 8, 8, "sprites");
 	public static Sprite nanobots0 = new Sprite(3, 1, 8, 8, "sprites");
 	public static Sprite nanobots1 = new Sprite(3, 2, 8, 8, "sprites");
@@ -132,7 +132,16 @@ public class Sprite {
 	public static Sprite healthBar4 = new Sprite(4, 5, 16, 16, "tiles");
 	
 	public static Sprite inventorySlot = new Sprite(2, 4, 16, 16, "tiles");
+	public static Sprite textBack = new Sprite(3, 4, 16, 16, "tiles");
 
+	public static Sprite tileBreak0 = new Sprite(0, 7, 16, 16, "tiles");
+	public static Sprite tileBreak1 = new Sprite(1, 7, 16, 16, "tiles");
+	public static Sprite tileBreak2 = new Sprite(2, 7, 16, 16, "tiles");
+	public static Sprite tileBreak3 = new Sprite(3, 7, 16, 16, "tiles");
+	public static Sprite tileBreak4 = new Sprite(4, 7, 16, 16, "tiles");
+	public static Sprite tileBreak5 = new Sprite(5, 7, 16, 16, "tiles");
+	public static Sprite tileBreak6 = new Sprite(6, 7, 16, 16, "tiles");
+	
 	public Sprite(double x, double y, double width, double height, String sheet) {
 		this.x = x;
 		this.y = y;

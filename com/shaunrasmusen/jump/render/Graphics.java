@@ -17,6 +17,7 @@ public class Graphics {
 
 	public static AngelCodeFont fonttiny, fontsmall, fontmed, fontbig;
 	protected static int width, height, scale;
+	private static int infoHelp = 0;
 
 	public static void initFont() {
 		try {
@@ -49,8 +50,12 @@ public class Graphics {
 
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		
+		if (sheet.getName().equals("sprites")) {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		}
+		
 		GL11.glTranslated(xOffset, yOffset, 0);
-		GL11.glRotated(angle,0.0,0.0,1.0);
+		GL11.glRotated(angle,x,y,0.0);
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2d(x / width, y / height);
 		GL11.glVertex2d(0, 0);
@@ -124,6 +129,17 @@ public class Graphics {
 		fontsmall.drawString(1, 0, "Money");
 		fontsmall.drawString(3, 1, "_____");
 		fontsmall.drawString((30) - (fontsmall.getWidth(money + "cr") / 2), 22, money + "cr");
+		
+		if ((Jump.level.getTileVal((Jump.player.x0 + 3) >> 4, Jump.player.y1 >> 4) == 3.1
+				|| Jump.level.getTileVal((Jump.player.x1 - 3) >> 4, Jump.player.y1 >> 4) == 3.1)) {
+			infoHelp++;
+			if (infoHelp > 250) {
+				Graphics.fonttiny.drawString(Display.getWidth() - Graphics.fonttiny.getWidth("Press LShift to teleport "),
+						(int) (y * 3) - 32, "Press LShift to teleport");
+				Graphics.fonttiny.drawString(Display.getWidth() - Graphics.fonttiny.getWidth("to the next area."),
+						(int) (y * 3) - 16, "to the next area.");
+			}
+		}
 
 		fullScale();
 	}
@@ -314,15 +330,15 @@ public class Graphics {
 			break;
 		case 6:
 			if (i == 6.0) {
-				fontsmall.drawString(100, 720, "Standard Sight Enhancement");
-				fonttiny.drawString(100, 740, "100cr");
-				fonttiny.drawString(100, 756, "Enhances sight distance by one tile when effected by blindness.");
+				fontsmall.drawString(100, 720, "Standard Gravitational Field Enhancement");
+				fonttiny.drawString(100, 740, "200cr");
+				fonttiny.drawString(100, 756, "Increases RoE of your gravitational field by one tile when laboratory gravity is decreased.");
 				fonttiny.drawString(100, 772, "Can be activated and deactivated at any time over 30 seconds.");
 			}
 			if (i == 6.1) {
-				fontsmall.drawString(100, 720, "Advanced Sight Enhancement");
-				fonttiny.drawString(100, 740, "300cr");
-				fonttiny.drawString(100, 756, "Enhances sight distance by three tile when effected by blindness.");
+				fontsmall.drawString(100, 720, "Advanced Gravitational Field Enhancement");
+				fonttiny.drawString(100, 740, "350cr");
+				fonttiny.drawString(100, 756, "Increases RoE of your gravitational field by three tiles when laboratory gravity is decreased.");
 				fonttiny.drawString(100, 772, "Can be activated and deactivated at any time over 30 seconds.");
 			}
 			break;
@@ -340,20 +356,21 @@ public class Graphics {
 				fontsmall.drawString(100, 720, "Box of 25,000 Medical Nano-bots");
 				fonttiny.drawString(100, 740, "100cr");
 				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that are capable of healing for a total of");
-				fonttiny.drawString(100, 772, "50hp. Slow working, lower quality bots that will complete the task in 20s,");
-				fonttiny.drawString(100, 788, "but these are offered at an unbeatable price. ");
+				fonttiny.drawString(100, 772, "50hp. Slow working, lower quality bots that will complete the task in a");
+				fonttiny.drawString(100, 788, "minimum 20s, but these are offered at an unbeatable price. ");
 			}
 			if (i == 8.1) {
 				fontsmall.drawString(100, 720, "Box of 50,000 Medical Nano-bots");
 				fonttiny.drawString(100, 740, "300cr");
 				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that are capable of healing for a total of");
-				fonttiny.drawString(100, 772, "75hp. Faster working, standard medical bots that can heal within 10s.");
+				fonttiny.drawString(100, 772, "100hp. Faster working, standard medical bots that can heal within 15s.");
 			}
 			if (i == 8.2) {
 				fontsmall.drawString(100, 720, "Box of 100,000 Medical Nano-bots");
 				fonttiny.drawString(100, 740, "500cr");
-				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that will fully regeneration 150hp over the span");
-				fonttiny.drawString(100, 772, "of 20s. Despite the high cost, are extremely effective and worth the cost.");
+				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that will fully regenerate 150hp over the span of a");
+				fonttiny.drawString(100, 772, "minimum 10s. Despite the high cost, they are very effective. Guaranteed you won't");
+				fonttiny.drawString(100, 788, "regret the purchase!");
 			}
 			break;
 		}

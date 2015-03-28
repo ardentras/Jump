@@ -36,7 +36,8 @@ public class Player {
 	private int hits = 0;
 	private int counter = 0;
 	private int noclipWait = 30;
-	private int anim, idleTime;
+	private int anim, tileBreakC;
+	public int idleTimer;
 	private boolean charge = false;
 	private boolean walking = false;
 	private boolean lava = false;
@@ -64,31 +65,6 @@ public class Player {
 		y1 = (int) y + 15;
 
 		if (screen == 0) {
-			if (effect.lavaDamageTimer == 0) {
-				lavaDamage = 1.0;
-			} else {
-				effect.lavaDamageTimer--;
-			}
-			
-			if (effect.sightTimer == 0)
-				effect.sightDist = 0;
-			
-			if (effect.sightDist > 0)
-				effect.sightTimer--;
-			
-			if (Jump.level.blindness) {
-				for (int a = 1; a < (y1 >> 4) - effect.sightDist; a++) {
-					for (int b = 2; b < Jump.level.width; b++) {
-						Jump.level.setTileVal(b, a, 1.0);
-					}
-				}
-				for (int a = 2; a < (((x0 + x1) / 2) >> 4) - effect.sightDist; a++) {
-					for (int b = 1; b < Jump.level.height; b++) {
-						Jump.level.setTileVal(a, b, 1.0);
-					}
-				}
-			}
-
 			xa = 0;
 			ya = 0;
 
@@ -249,6 +225,58 @@ public class Player {
 	}
 
 	public void render() {
+		if (Jump.level.blindness) {
+			tileBreakC++;
+			for (int a = 1; a < (y1 >> 4) - effect.sightDist; a++) {
+				for (int b = 2; b < Jump.level.width; b++) {
+					if (tileBreakC > 35) tileBreakC = 0;
+					if (((Jump.level.getTileVal(b, a) >= 2.0 && Jump.level.getTileVal(b, a) < 3.0) 
+							|| (Jump.level.getTileVal(b, a) >= 3.0 && Jump.level.getTileVal(b, a) < 4.0) || Jump.level.getTileVal(b,a) < 0.9) && tileBreakC < 35) {
+						if (tileBreakC >= 0 && tileBreakC < 5)
+							Sprite.tileBreak0.renderSprite(b, a, 0);
+						if (tileBreakC >= 5 && tileBreakC < 10)
+							Sprite.tileBreak1.renderSprite(b, a, 0);
+						if (tileBreakC >= 10 && tileBreakC < 15)
+							Sprite.tileBreak2.renderSprite(b, a, 0);
+						if (tileBreakC >= 15 && tileBreakC < 20)
+							Sprite.tileBreak3.renderSprite(b, a, 0);
+						if (tileBreakC >= 20 && tileBreakC < 25)
+							Sprite.tileBreak4.renderSprite(b, a, 0);
+						if (tileBreakC >= 25 && tileBreakC < 30)
+							Sprite.tileBreak5.renderSprite(b, a, 0);
+						if (tileBreakC >= 30 && tileBreakC < 35) {
+							Jump.level.setTileVal(b, a, 1.0);
+							Sprite.tileBreak6.renderSprite(b, a, 0);
+						}
+					}
+				}
+			}
+			for (int b = 2; b < (((x0 + x1) / 2) >> 4) - effect.sightDist; b++) {
+				for (int a = 1; a < Jump.level.height; a++) {
+					if (tileBreakC > 35) tileBreakC = 0;
+					if (((Jump.level.getTileVal(b, a) >= 2.0 && Jump.level.getTileVal(b, a) < 3.0) 
+							|| (Jump.level.getTileVal(b, a) >= 3.0 && Jump.level.getTileVal(b, a) < 4.0) || Jump.level.getTileVal(b,a) < 0.9) && tileBreakC < 35) {
+						if (tileBreakC >= 0 && tileBreakC < 5)
+							Sprite.tileBreak0.renderSprite(b, a, 0);
+						if (tileBreakC >= 5 && tileBreakC < 10)
+							Sprite.tileBreak1.renderSprite(b, a, 0);
+						if (tileBreakC >= 10 && tileBreakC < 15)
+							Sprite.tileBreak2.renderSprite(b, a, 0);
+						if (tileBreakC >= 15 && tileBreakC < 20)
+							Sprite.tileBreak3.renderSprite(b, a, 0);
+						if (tileBreakC >= 20 && tileBreakC < 25)
+							Sprite.tileBreak4.renderSprite(b, a, 0);
+						if (tileBreakC >= 25 && tileBreakC < 30)
+							Sprite.tileBreak5.renderSprite(b, a, 0);
+						if (tileBreakC >= 30 && tileBreakC < 35) {
+							Jump.level.setTileVal(b, a, 1.0);
+							Sprite.tileBreak6.renderSprite(b, a, 0);
+						}
+					}
+				}
+			}
+		}
+		
 		effect.tick();
 		
 		int r = random.nextInt(100);
@@ -258,16 +286,16 @@ public class Player {
 			else
 				sprite = Sprite.playerf;
 			
-			if (anim % 150 > 75 && idleTime > 150) {
+			if (anim % 150 > 75 && idleTimer > 150) {
 				if (lava) sprite = Sprite.lplayerfw;
 				else
 					sprite = Sprite.playerfw;
 			}
 			
-			idleTime++;
+			idleTimer++;
 			
 			if (walking) {
-				idleTime = 0;
+				idleTimer = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerf1;
 					else
@@ -299,16 +327,16 @@ public class Player {
 			else
 				sprite = Sprite.playerr;
 			
-			if (anim % 150 > 75 && idleTime > 150) {
+			if (anim % 150 > 75 && idleTimer > 150) {
 				if (lava) sprite = Sprite.lplayerrw;
 				else
 					sprite = Sprite.playerrw;
 			}
 			
-			idleTime++;
+			idleTimer++;
 			
 			if (walking) {
-				idleTime = 0;
+				idleTimer = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerr1;
 					else
@@ -340,16 +368,16 @@ public class Player {
 			else
 				sprite = Sprite.playerb;
 			
-			if (anim % 150 > 75 && idleTime > 150) {
+			if (anim % 150 > 75 && idleTimer > 150) {
 				if (lava) sprite = Sprite.lplayerbw;
 				else
 					sprite = Sprite.playerbw;
 			}
 			
-			idleTime++;
+			idleTimer++;
 			
 			if (walking) {
-				idleTime = 0;
+				idleTimer = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerb1;
 					else
@@ -381,16 +409,16 @@ public class Player {
 			else
 				sprite = Sprite.playerl;
 			
-			if (anim % 150 > 75 && idleTime > 150) {
+			if (anim % 150 > 75 && idleTimer > 150) {
 				if (lava) sprite = Sprite.lplayerlw;
 				else
 					sprite = Sprite.playerlw;
 			}
 			
-			idleTime++;
+			idleTimer++;
 			
 			if (walking) {
-				idleTime = 0;
+				idleTimer = 0;
 				if (anim % 40 > 30) {
 					if (lava) sprite = Sprite.lplayerl1;
 					else
@@ -419,7 +447,6 @@ public class Player {
 		}
 
 		sprite.renderSprite(x, y, 0);
-		renderInv();
 		
 		// Render counter over player
 		// for (int y = 0; y < Jump.level.height; y++) {
@@ -657,13 +684,21 @@ public class Player {
 			if (inventory[i] == 5.0) Sprite.fire0.renderSprite(4, (i + 10) * 16 + 4, 0);
 			if (inventory[i] == 5.1) Sprite.fire1.renderSprite(4, (i + 10) * 16 + 4, 0);
 			if (inventory[i] == 5.2) Sprite.fire2.renderSprite(4, (i + 10) * 16 + 4, 0);
-			if (inventory[i] == 6.0) Sprite.sight.renderSprite(4, (i + 10) * 16 + 4, 0);
-			Graphics.halfScale();
-			if (inventory[i] == 6.1) {
-				Sprite.sight.renderSprite(4, (i + 10) * 24 + 8, 0);
-				Sprite.sight.renderSprite(12, (i + 10) * 24 + 8, 0);
+			if (inventory[i] == 6.0) {
+				Sprite.gravity.renderSprite(4, (i + 10) * 16 + 2, 0);
+				Graphics.noScale();
+				Graphics.fonttiny.drawString(28, (i + 10) * 48 + 26, "x1");
+				Graphics.fullScale();
 			}
-			Graphics.fullScale();
+			if (inventory[i] == 6.1) {
+				Sprite.gravity.renderSprite(4, (i + 10) * 16 + 2, 0);
+				Graphics.noScale();
+				Graphics.fonttiny.drawString(28, (i + 10) * 48 + 26, "x3");
+				Graphics.fullScale();
+			}
+			if (inventory[i] == 8.0) Sprite.nanobots0.renderSprite(4, (i + 10) * 16 + 4, 0);
+			if (inventory[i] == 8.1) Sprite.nanobots1.renderSprite(4, (i + 10) * 16 + 4, 0);
+			if (inventory[i] == 8.2) Sprite.nanobots2.renderSprite(4, (i + 10) * 16 + 4, 0);
 		}
 	}
 
@@ -685,8 +720,7 @@ public class Player {
 				Graphics.renderShopInfo(money, health);
 			}
 			if (!Jump.isStore()) {
-				Graphics.renderGameInfo((int) dist, health, money, (int) x, (int) y,
-						Jump.level.level, Jump.timer / 60);
+				Graphics.renderGameInfo((int) dist, health, money, (int) x, (int) y, Jump.level.level, Jump.timer / 60);
 			}
 			sprite.renderSprite(x, y, 0);
 			renderInv();

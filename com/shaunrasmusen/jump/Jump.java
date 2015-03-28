@@ -153,6 +153,7 @@ public class Jump {
 		player.render();
 		shopkeeper.render();
 		Graphics.renderShopInfo(player.money, player.health);
+		player.renderInv();
 		
 		Display.update();
 	}
@@ -170,6 +171,7 @@ public class Jump {
 		level.render();
 		Graphics.renderGameInfo((int) player.dist, player.health, player.money, player.x, player.y, l, timer / 60);
 		player.render();
+		player.renderInv();
 
 		if (level.tiles[level.width - 1 + (level.height - 1) * level.width] != 3.0) timer--;
 		if (timer <= 0) {
@@ -293,7 +295,7 @@ public class Jump {
 		}
 
 		Graphics.initGL(width, height, scale);
-
+		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		Graphics.initFont();
 	}
 
