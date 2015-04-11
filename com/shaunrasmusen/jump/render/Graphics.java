@@ -17,7 +17,7 @@ public class Graphics {
 
 	public static AngelCodeFont fonttiny, fontsmall, fontmed, fontbig;
 	protected static int width, height, scale;
-	private static int infoHelp = 0;
+	public static int infoHelp = 0;
 
 	public static void initFont() {
 		try {

@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 
 public class Keys {
-	public boolean up, left, down, right, jump, reset, tp, pause, one, two, three, four, five, six;
+	public boolean up, left, down, right, jump, reset, tp, pause, one, two, three, four, five, six, plus, minus;
 	public boolean noclip1, noclip2, noclip0;
 	public int upBind, leftBind, downBind, rightBind, jumpBind, resetBind, tpBind, pauseBind;
 	public int currKey = 0;
@@ -43,7 +43,9 @@ public class Keys {
 		reset = Keyboard.isKeyDown(resetBind);
 		tp = Keyboard.isKeyDown(tpBind);
 		pause = Keyboard.isKeyDown(pauseBind);
-
+		plus = Keyboard.isKeyDown(Keyboard.KEY_EQUALS);
+		minus = Keyboard.isKeyDown(Keyboard.KEY_MINUS);
+		
 		if (!up && !left && !down && !right) {
 			if (jump) currKey = jumpBind;
 		} else {

@@ -62,7 +62,7 @@ public class Player {
 		x0 = (int) x + 5;
 		x1 = (int) x + 11;
 		y0 = (int) y + 14;
-		y1 = (int) y + 15;
+		y1 = (int) y + 14;
 
 		if (screen == 0) {
 			xa = 0;
@@ -77,7 +77,7 @@ public class Player {
 			// EDGE COLLISIONS MUTHAFUCKA!
 			if (input.up && y0 - dist > 2) ya -= dist;
 			if (input.right && x1 + dist < Jump.level.width * 16) xa += dist;
-			if (input.down && y1 + dist < Jump.level.height * 16) ya += dist;
+			if (input.down && y1 + dist < Jump.level.height * 16 - 2) ya += dist;
 			if (input.left && x0 - dist > 26) xa -= dist;
 
 			spaceTime = System.currentTimeMillis() - systimeStart;
@@ -123,6 +123,18 @@ public class Player {
 				noclipWait++;
 			}
 
+			if (Jump.keys.plus && Jump.volume < 1.0f && noclipWait > 10) {
+				Jump.volume += 0.1f;
+				noclipWait = 0;
+				Jump.ingame.stop();
+			}
+			if (Jump.keys.minus && Jump.volume > 0.0f && noclipWait > 10) {
+				Jump.volume -= 0.1f;
+				noclipWait = 0;
+				Jump.ingame.stop();
+			}
+			
+			System.out.println(Jump.volume);
 			if (input.one) effect.use(0);
 			if (input.two) effect.use(1);
 			if (input.three) effect.use(2);

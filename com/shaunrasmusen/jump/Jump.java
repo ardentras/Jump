@@ -193,6 +193,7 @@ public class Jump {
 	}
 
 	public void reGen() {
+		Graphics.infoHelp = 0;
 		if (random.nextInt(100) == 1) hot = true;
 		else
 			hot = false;

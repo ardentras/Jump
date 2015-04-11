@@ -144,7 +144,7 @@ public class Effects {
 				usingHeal = i;
 			}
 		}
-		if (keyWait > 10) {
+		if (keyWait > 10) {				
 			if (e == 8.0) {
 				regen = true;
 				heal = .04167;
