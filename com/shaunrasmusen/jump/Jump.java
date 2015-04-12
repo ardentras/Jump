@@ -26,6 +26,7 @@ import com.shaunrasmusen.jump.entity.Shopkeeper;
 import com.shaunrasmusen.jump.input.Keys;
 import com.shaunrasmusen.jump.level.Level;
 import com.shaunrasmusen.jump.level.RandomLevel;
+import com.shaunrasmusen.jump.level.Store;
 import com.shaunrasmusen.jump.render.Graphics;
 
 public class Jump {
@@ -37,6 +38,7 @@ public class Jump {
 	public static float volume;
 	
 	public static Level level;
+	public static Store store;
 	public static Player player;
 	public static Shopkeeper shopkeeper;
 	public static Keys keys;
@@ -51,7 +53,7 @@ public class Jump {
 	private boolean hot = false;
 	
 	private static boolean paused = false;
-	private static boolean store = false;
+	private static boolean inStore = false;
 	// TODO Remove var assignment
 	private String playerName = "default";
 
@@ -96,8 +98,9 @@ public class Jump {
 		player.y = 9;
 
 		level = new RandomLevel(18, 17, l, hot);
+		store = new Store(18, 17);
 		
-		level.generateStore();
+		store.generateStore();
 		
 		while (!Display.isCloseRequested()) {
 			if (!isPaused()) {
@@ -138,13 +141,12 @@ public class Jump {
 		
 		player.tempX = player.x;
 		player.tempY = player.y;
-		level.loadStore();
 		player.x = 47;
 		player.y = 42;
 	}
 	
 	public static void renderStore() {
-		level.render();
+		store.render();
 		
 		keys.tick();
 		player.tick(1);
@@ -161,8 +163,6 @@ public class Jump {
 	public static void closeStore() {
 		player.x = player.tempX;
 		player.y = player.tempY;
-		
-		level.closeStore();
 	}
 
 	public void renderGame() {	
@@ -282,7 +282,7 @@ public class Jump {
 		
 		player.startHealth = player.health;
 		
-		level.generateStore();
+		store.generateStore();
 	}
 
 	public void createEnvironment() {
@@ -400,11 +400,11 @@ public class Jump {
 	}
 
 	public static boolean isStore() {
-		return store;
+		return inStore;
 	}
 
-	public static void setStore(boolean store) {
-		Jump.store = store;
+	public static void setStore(boolean inStore) {
+		Jump.inStore = inStore;
 	}
 	
 	public static boolean isPaused() {

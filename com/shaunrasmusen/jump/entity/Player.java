@@ -20,6 +20,7 @@ public class Player {
 	public boolean noclip = false;
 	public boolean complete = false;
 	public boolean inventoryFull = false;
+	public boolean voidAvoid = false;
 	public double x, y, tempX = 0, tempY = 0;
 	public int x0, x1, y0, y1;
 
@@ -40,7 +41,7 @@ public class Player {
 	public int idleTimer;
 	private boolean charge = false;
 	private boolean walking = false;
-	private boolean lava = false;
+	public boolean lava = false;
 
 	public Player(Keys input) {
 		this.input = input;
@@ -113,7 +114,7 @@ public class Player {
 				hits = 0;
 			}
 
-			if (!noclip) checkCollisions();
+			if (!noclip) Jump.level.checkCollisions(x, y, xa, ya, x0, x1, y0, y1);
 
 			if (input.noclip1 && input.noclip2 && input.noclip0 && noclipWait >= 30) {
 				noclip = !noclip;
@@ -134,13 +135,26 @@ public class Player {
 				Jump.ingame.stop();
 			}
 			
-			System.out.println(Jump.volume);
 			if (input.one) effect.use(0);
 			if (input.two) effect.use(1);
 			if (input.three) effect.use(2);
 			if (input.four) effect.use(3);
 			if (input.five) effect.use(4);
 			if (input.six) effect.use(5);
+			
+			if (input.tp) {
+				if (Jump.level.tryTP(xa, x0, x1, y0, y1) == 3.1) {
+					complete = true;
+					teleportAnim();
+					calcScore();
+				}
+				if (Jump.level.tryTP(xa, x0, x1, y0, y1) == 3.2) {
+					teleportAnim();
+
+					Jump.genStore();
+					Jump.setStore(true);
+				}
+			}
 		}
 		if (screen == 1) {
 			ya = 0;
@@ -156,8 +170,14 @@ public class Player {
 			else
 				anim = 0;
 
-			checkCollisions();
+			Jump.store.checkCollisions(x, y, xa, ya, x0, x1, y0, y1);
 			checkItems();
+			
+			if (input.tp) {
+				if (Jump.store.tryTP(xa, x0, x1, y0, y1) == 3.2) {
+					teleportAnim();
+				}
+			}
 		}
 
 		if (xa != 0 || ya != 0) {
@@ -469,193 +489,22 @@ public class Player {
 		// }
 	}
 
-	private void checkCollisions() {
-		// Lava
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) <= 0.9
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) <= 0.9) {
-			lava = true;
-			health -= lavaDamage;
-
-			if (health == 0) Jump.lavaDeath = true;
-		} else {
-			lava = false;
-		}
-
-		// Void
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 1.0
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 1.0) {
-			if (effect.voidAvoid) {
-				effect.findTileCirc();
-			} else {
-				health = 0;
-				Jump.voidDeath = true;
-			}
-		}
-
-		// Store Portal
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.3
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.3) {
-			if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 3.2);
-			else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 3.2);
-			else
-				Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 3.2);
-
-			Jump.level.onStore = true;
-		}
-
-		if ((Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.2 || Jump.level.getTileVal(
-				(x1 - 3) >> 4, y1 >> 4) == 3.2)
-				&& input.tp) {
-			teleportAnim();
-
-			Jump.genStore();
-			Jump.setStore(true);
-		}
-
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) != 3.2
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) != 3.2) {
-			Jump.level.onStore = false;
-		}
-
-		// Store Portal Exit
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 8.4
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 8.4) {
-			if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 8.3);
-			else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 8.3);
-			else
-				Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 8.3);
-
-			Jump.level.onStoreExit = true;
-		}
-
-		if ((Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 8.3 || Jump.level.getTileVal(
-				(x1 - 3) >> 4, y1 >> 4) == 8.3)
-				&& input.tp) {
-			teleportAnim();
-
-			Jump.closeStore();
-			Jump.setStore(false);
-		}
-
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) != 8.3
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) != 8.3) {
-			Jump.level.onStoreExit = false;
-		}
-
-		// Goal Platform
-		if ((Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.1
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.1) && input.tp) {
-				complete = true;
-				if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 3.0);
-				else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 3.0);
-				else
-					Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 3.0);
-
-				teleportAnim();
-
-				calcScore();
-		}
-
-		// Health Tiles
-
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.1
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.1) {
-			if (health <= maxHealth - 10) health += 10;
-			else if (health < maxHealth)
-				health = maxHealth;
-
-			if (health < maxHealth) {
-				if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-				else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-				else
-					Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-			}
-		}
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.2
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.2) {
-			if (health <= maxHealth - 20) health += 20;
-			else if (health < maxHealth)
-				health = maxHealth;
-
-			if (health < maxHealth) {
-				if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-				else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-				else
-					Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-			}
-		}
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.3
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.3) {
-			if (health <= maxHealth - 30) health += 30;
-			else if (health < maxHealth)
-				health = maxHealth;
-
-			if (health < maxHealth) {
-				if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-				else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-				else
-					Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-			}
-		}
-
-		// Money Tiles
-
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.5
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.5) {
-			money += 10;
-			if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-			else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-			else
-				Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-		}
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.6
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.6) {
-			money += 30;
-			if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-			else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-			else
-				Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-		}
-		if (Jump.level.getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.7
-				|| Jump.level.getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.7) {
-			money += 50;
-			if (xa > 0) Jump.level.setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
-			else if (xa < 0) Jump.level.setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
-			else
-				Jump.level.setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-		}
-
-		// Collisions w/ solid blocks
-		if (Jump.level.getTile(x0 >> 4, (y0 - 1) >> 4).isSolid()) {
-			if (ya < 0) ya = 0;
-		}
-		if (Jump.level.getTile((x0 - 1) >> 4, y0 >> 4).isSolid()) {
-			if (xa < 0) xa = 0;
-		}
-		if (Jump.level.getTile(x1 >> 4, (y1 + 1) >> 4).isSolid()) {
-			if (ya > 0) ya = 0;
-		}
-		if (Jump.level.getTile((x1 + 1) >> 4, y1 >> 4).isSolid()) {
-			if (xa > 0) xa = 0;
-		}
-	}
-
 	public void checkItems() {
 		int xs = (((x0 + x1) / 2) >> 4), xr = (((x0 + x1) / 2) >> 4) + 1, ys = (y1 >> 4), yb = (y1 >> 4) + 1, epx = 0, epy = 0;
 
-		for (int i = 0; i < Jump.level.shopSprite.length - 1; i += 3) {
-			if (Jump.level.shopSprite[i] > 0) {
-				epx = (int) (Jump.level.shopSprite[i + 1]);
-				epy = (int) (Jump.level.shopSprite[i + 2]);
+		for (int i = 0; i < Jump.store.storeSprite.length - 1; i += 3) {
+			if (Jump.store.storeSprite[i] > 0) {
+				epx = (int) (Jump.store.storeSprite[i + 1]);
+				epy = (int) (Jump.store.storeSprite[i + 2]);
 			}
 
 			if (xr == epx && ys == epy && getDir() == 1) {
-				Graphics.drawShopItemInfo(Jump.level.shopSprite[i], epx, epy);
-				if (input.tp) effect.buy(Jump.level.shopSprite[i], i, money, health, maxHealth);
+				Graphics.drawShopItemInfo(Jump.store.storeSprite[i], epx, epy);
+				if (input.tp) effect.buy(Jump.store.storeSprite[i], i, money, health, maxHealth);
 			}
 			if (yb == epy && xs == epx && getDir() == 2) {
-				Graphics.drawShopItemInfo(Jump.level.shopSprite[i], epx, epy);
-				if (input.tp) effect.buy(Jump.level.shopSprite[i], i, money, health, maxHealth);
+				Graphics.drawShopItemInfo(Jump.store.storeSprite[i], epx, epy);
+				if (input.tp) effect.buy(Jump.store.storeSprite[i], i, money, health, maxHealth);
 			}
 		}
 	}
@@ -726,12 +575,13 @@ public class Player {
 			if (i == 28) sprite = Sprite.playertp6;
 			if (i == 32) sprite = Sprite.playertp7;
 
-			Jump.level.render();
 			if (Jump.isStore()) {
+				Jump.store.render();
 				Jump.shopkeeper.render();
 				Graphics.renderShopInfo(money, health);
 			}
 			if (!Jump.isStore()) {
+				Jump.level.render();
 				Graphics.renderGameInfo((int) dist, health, money, (int) x, (int) y, Jump.level.level, Jump.timer / 60);
 			}
 			sprite.renderSprite(x, y, 0);

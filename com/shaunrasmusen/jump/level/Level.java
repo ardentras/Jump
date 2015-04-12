@@ -1,25 +1,19 @@
 package com.shaunrasmusen.jump.level;
 
-import java.util.Random;
-
 import com.shaunrasmusen.jump.Jump;
-import com.shaunrasmusen.jump.render.Graphics;
-import com.shaunrasmusen.jump.render.texture.Sprite;
 import com.shaunrasmusen.jump.render.texture.Tile;
 
 public class Level {
 
-	public double[] tiles, tilesSave, store;
-	public double[] shopSprite = new double[240];
+	public double[] tiles;
 	public int width, height;
 	public boolean blindness;
-	public boolean onStore = false, onStoreExit = false;
+	public boolean onStore = false;
 
 	public int level;
 	protected boolean hot;
 
 	private int lavaCounter = 0;
-	private Random random = new Random();
 
 	private static Tile nullTile = new Tile(15, 15, 16, 16, "tiles", false);
 
@@ -82,133 +76,12 @@ public class Level {
 	private static Tile voidTileLBR = new Tile(5, 0, 16, 16, "tiles", false);
 	private static Tile voidTile4 = new Tile(5, 4, 16, 16, "tiles", false);
 
-	// Shop Tiles
-
-	private static Tile blackTile = new Tile(1, 4, 16, 16, "tiles", true);
-
-	private static Tile floorGreen = new Tile(11, 0, 16, 16, "tiles", false);
-	private static Tile floorWood = new Tile(11, 1, 16, 16, "tiles", false);
-	private static Tile storeWall = new Tile(13, 0, 16, 16, "tiles", true);
-	
-	private static Tile storeTPoutOn = new Tile(11, 2, 16, 16, "tiles", false);
-	private static Tile storeTPoutOff = new Tile(11, 3, 16, 16, "tiles", false);
-
-	private static Tile counterSide = new Tile(12, 0, 16, 16, "tiles", true);
-	private static Tile counterTop = new Tile(12, 2, 16, 16, "tiles", true);
-	private static Tile counterCornerOut = new Tile(12, 1, 16, 16, "tiles", true);
-	private static Tile counterCornerIn = new Tile(12, 3, 16, 16, "tiles", true);
-
 	public Level(int width, int height, int level) {
 		this.width = width;
 		this.height = height;
 		this.level = level;
 		tiles = new double[width * height];
-		tilesSave = new double[width * height];
-		store = new double[width * height];
 		generateLevel();
-	}
-
-	public void loadStore() {
-		tilesSave = tiles.clone();
-		tiles = store.clone();
-	}
-	
-	public void generateStore() {
-		int yCount = 0, xCount = 0, i = 0;
-		double[] store = 
-			{ 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0,
-		      8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.3, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.1, 9.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 9.1, 9.2, 9.2, 9.2, 9.2, 9.2, 9.3, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.1, 8.1, 8.1, 8.1, 9.0, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.2, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.0, 8.0,
-		      8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0,
-		      8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0 };
-		
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (store[x + y * width] == 9.1 && store[(x + 2) + y * width] == 8.5 && yCount < 7) {
-					if (random.nextInt(10) < 5) {
-						yCount++;
-						store[x + y * width] = 8.1;
-						store[(x + 1) + y * width] = 8.1;
-						store[x + (y + 1) * width] = 9.1;
-						store[(x + 1) + (y + 1) * width] = 9.2;
-					}
-				}
-				if (store[x + y * width] == 9.1 && store[x + (y + 2) * width] == 8.5 && xCount < 5) {
-					if (random.nextInt(10) < 5) {
-						xCount++;
-						store[x + y * width] = 8.1;
-						store[x + (y + 1) * width] = 8.1;
-						store[(x + 1) + y * width] = 9.1;
-						store[(x + 1) + (y + 1) * width] = 9.0;
-					}
-				}
-				if (store[x + y * width] == 9.0 || store[x + y * width] == 9.2) {
-					int r;
-					shopSprite[i + 1] = x;
-					shopSprite[i + 2] = y;
-					
-					switch (random.nextInt(9)) {
-					case 1:
-						r = random.nextInt(3);
-						if (r == 0) shopSprite[i] = 1.0;
-						if (r == 1) shopSprite[i] = 1.1;
-						if (r == 2) shopSprite[i] = 1.2;
-						break;
-					case 2:
-						r = random.nextInt(4);
-						if (r == 0) shopSprite[i] = 2.0;
-						if (r == 1) shopSprite[i] = 2.1;
-						if (r == 2) shopSprite[i] = 2.2;
-						if (r == 3) shopSprite[i] = 2.3;
-						break;
-					case 3:
-						r = random.nextInt(3);
-						if (r == 0) shopSprite[i] = 3.0;
-						if (r == 1) shopSprite[i] = 3.1;
-						if (r == 2) shopSprite[i] = 3.2;
-						break;
-					case 4:
-						shopSprite[i] = 4.0;
-						break;
-					case 5:
-						r = random.nextInt(3);
-						if (r == 0) shopSprite[i] = 5.0;
-						if (r == 1) shopSprite[i] = 5.1;
-						if (r == 2) shopSprite[i] = 5.2;
-						break;
-					case 6:
-						r = random.nextInt(2);
-						if (r == 0) shopSprite[i] = 6.0;
-						if (r == 1) shopSprite[i] = 6.1;
-						break;
-					case 7:
-						shopSprite[i] = 7.0;
-						break;
-					case 8:
-						r = random.nextInt(3);
-						if (r == 0) shopSprite[i] = 8.0;
-						if (r == 1) shopSprite[i] = 8.1;
-						if (r == 2) shopSprite[i] = 8.2;
-						break;
-					}
-					i += 3;
-				}
-			}
-		}
-		
-		this.store = store.clone();
 	}
 
 	protected void generateLevel() {
@@ -224,86 +97,149 @@ public class Level {
 				if (!onStore) {
 					if (getTileVal(x, y) == 3.2) setTileVal(x, y, 3.3);
 				}
-				if (!onStoreExit) {
-					if (getTileVal(x, y) == 8.3) setTileVal(x, y, 8.4);
-				}
 				getTile(x, y).renderTile(x, y);
 			}
 		}
-		
-		if (Jump.isStore()) {
-			renderStoreSprite();
-		}
 	}
-	
-	public void renderStoreSprite() {		
-		Graphics.halfScale();
-		for (int i = 0; i < shopSprite.length - 1; i +=3) {
-			if (shopSprite[i] > 0) {
-				int x = (int) ((shopSprite[i + 1] * 24) + 6);
-				int y = (int) ((shopSprite[i + 2] * 24) + 6);
 
-				if (shopSprite[i] == 1.0) Sprite.heartPlus.renderSprite(x, y, 0);
-				if (shopSprite[i] == 1.1) {
-					Sprite.heartPlus.renderSprite(x - 3, y - 3, 0);
-					Sprite.heartPlus.renderSprite(x + 3, y + 3, 0);
-				}
-				if (shopSprite[i] == 1.2) {
-					Sprite.heartPlus.renderSprite(x - 4, y - 4, 0);
-					Sprite.heartPlus.renderSprite(x + 4, y - 4, 0);
-					Sprite.heartPlus.renderSprite(x, y + 4, 0);
-				}
-				if (shopSprite[i] == 2.0) Sprite.heart.renderSprite(x, y, 0);
-				if (shopSprite[i] == 2.1) {
-					Sprite.heart.renderSprite(x - 3, y - 3, 0);
-					Sprite.heart.renderSprite(x + 3, y + 3, 0);
-				}
-				if (shopSprite[i] == 2.2) {
-					Sprite.heart.renderSprite(x - 4, y - 4, 0);
-					Sprite.heart.renderSprite(x + 4, y - 4, 0);
-					Sprite.heart.renderSprite(x, y + 4, 0);
-				}
-				if (shopSprite[i] == 2.3) {
-					Graphics.fullScale();
-					Sprite.heart.renderSprite((x / 1.5) - 1, (y / 1.5) - 1, 0);
-					Graphics.halfScale();
-				}
-				if (shopSprite[i] == 3.0) Sprite.clock0.renderSprite(x, y, 0);
-				if (shopSprite[i] == 3.1) Sprite.clock1.renderSprite(x, y, 0);
-				if (shopSprite[i] == 3.2) Sprite.clock2.renderSprite(x, y, 0);
-				if (shopSprite[i] == 4.0) Sprite.jetpack.renderSprite(x, y, 0);
-				if (shopSprite[i] == 5.0) Sprite.fire0.renderSprite(x, y, 0);
-				if (shopSprite[i] == 5.1) Sprite.fire1.renderSprite(x, y, 0);
-				if (shopSprite[i] == 5.2) Sprite.fire2.renderSprite(x, y, 0);
-				if (shopSprite[i] == 6.0) Sprite.gravity.renderSprite(x, y, 0);
-				if (shopSprite[i] == 6.1) {
-					Sprite.gravity.renderSprite(x - 4, y, 0);
-					Sprite.gravity.renderSprite(x + 4, y, 0);
-				}
-				if (shopSprite[i] == 7.0) Sprite.chevron.renderSprite(x, y, 0);
-				if (shopSprite[i] == 8.0) Sprite.nanobots0.renderSprite(x, y, 0);
-				if (shopSprite[i] == 8.1) Sprite.nanobots1.renderSprite(x, y, 0);
-				if (shopSprite[i] == 8.2) Sprite.nanobots2.renderSprite(x, y, 0);
+	public void checkCollisions(double x, double y, double xa, double ya, int x0, int x1, int y0, int y1) {
+		int money = Jump.player.money;
+		double health = Jump.player.health;
+		short maxHealth = Jump.player.maxHealth;
+
+		// Lava
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) <= 0.9 || getTileVal((x1 - 3) >> 4, y1 >> 4) <= 0.9) {
+			Jump.player.lava = true;
+			health -= Jump.player.lavaDamage;
+
+			if (health == 0) Jump.lavaDeath = true;
+		} else {
+			Jump.player.lava = false;
+		}
+
+		// Void
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 1.0 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 1.0) {
+			if (Jump.player.voidAvoid) {
+				findTileCirc();
+			} else {
+				health = 0;
+				Jump.voidDeath = true;
 			}
 		}
-		Graphics.fullScale();
+
+		// Store Portal
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.3 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.3) {
+			if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 3.2);
+			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 3.2);
+			else
+				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 3.2);
+
+			onStore = true;
+		}
+
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) != 3.2
+				|| getTileVal((x1 - 3) >> 4, y1 >> 4) != 3.2) {
+			onStore = false;
+		}
+
+		// Goal Platform
+		if ((getTileVal((x0 + 3) >> 4, y1 >> 4) == 3.1 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 3.1)) {
+			if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 3.0);
+			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 3.0);
+			else
+				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 3.0);
+		}
+
+		// Health Tiles
+
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.1 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.1) {
+			if (health <= maxHealth - 10) health += 10;
+			else if (health < maxHealth)
+				health = maxHealth;
+
+			if (health < maxHealth) {
+				if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+				else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+				else
+					setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+			}
+		}
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.2 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.2) {
+			if (health <= maxHealth - 20) health += 20;
+			else if (health < maxHealth)
+				health = maxHealth;
+
+			if (health < maxHealth) {
+				if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+				else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+				else
+					setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+			}
+		}
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.3 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.3) {
+			if (health <= maxHealth - 30) health += 30;
+			else if (health < maxHealth)
+				health = maxHealth;
+
+			if (health < maxHealth) {
+				if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+				else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+				else
+					setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+			}
+		}
+
+		// Money Tiles
+
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.5 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.5) {
+			money += 10;
+			if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+			else
+				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+		}
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.6 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.6) {
+			money += 30;
+			if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+			else
+				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+		}
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 2.7 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 2.7) {
+			money += 50;
+			if (xa > 0) setTileVal((x1 - 3) >> 4, y1 >> 4, 2.0);
+			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
+			else
+				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
+		}
+
+		// Collisions w/ solid blocks
+		if (getTile(x0 >> 4, (y0 - 1) >> 4).isSolid()) {
+			if (ya < 0) ya = 0;
+		}
+		if (getTile((x0 - 1) >> 4, y0 >> 4).isSolid()) {
+			if (xa < 0) xa = 0;
+		}
+		if (getTile(x1 >> 4, (y1 + 1) >> 4).isSolid()) {
+			if (ya > 0) ya = 0;
+		}
+		if (getTile((x1 + 1) >> 4, y1 >> 4).isSolid()) {
+			if (xa > 0) xa = 0;
+		}
+
+		Jump.player.health = health;
+		Jump.player.money = money;
+	}
+
+	public double tryTP(double xa, int x0, int x1, int y0, int y1) {
+		if (xa > 0) return getTileVal((x1 - 3) >> 4, y1 >> 4);
+		else if (xa < 0) return getTileVal((x0 + 3) >> 4, y1 >> 4);
+		else
+			return getTileVal(((x0 + x1) / 2) >> 4, y1 >> 4);
 	}
 
 	public Tile getTile(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) return nullTile;
-
-		if (tiles[x + y * width] == 8.0) return blackTile;
-		if (tiles[x + y * width] == 8.1) return floorGreen;
-		if (tiles[x + y * width] == 8.2) return floorWood;
-		if (tiles[x + y * width] == 8.5) return storeWall;
-
-		if (tiles[x + y * width] == 8.3) return storeTPoutOn;
-		if (tiles[x + y * width] == 8.4) return storeTPoutOff;
-
-		if (tiles[x + y * width] == 9.0) return counterSide;
-		if (tiles[x + y * width] == 9.1) return counterCornerOut;
-		if (tiles[x + y * width] == 9.2) return counterTop;
-		if (tiles[x + y * width] == 9.3) return counterCornerIn;
 
 		if (tiles[x + y * width] == 2.0) return platTile;
 
@@ -327,8 +263,6 @@ public class Level {
 		if (tiles[x + y * width] == 5.2) return wall0;
 		if (tiles[x + y * width] == 5.3) return wall1;
 		if (tiles[x + y * width] == 5.4) return wall2;
-
-		if (tiles[x + y * width] == 8.0) return blackTile;
 
 		if (hot) {
 			// if (tiles[x + y * width] == 0.0 && lavaCounter < 31) return
@@ -419,6 +353,35 @@ public class Level {
 		return nullTile;
 	}
 
+	public void findTileCirc() {
+		int diam = 2;
+		int startx = (int) (Jump.player.x) >> 4;
+		int starty = (int) (Jump.player.y) >> 4;
+		int x = startx - 1;
+		int y = starty - 1;
+		if (x < 2) x = 2;
+		if (y < 1) y = 1;
+
+		while (Jump.level.getTileVal(x, y) > 4.0 || Jump.level.getTileVal(x, y) < 1.9) {
+			if (x <= startx + diam) x++;
+			if (x == startx + diam) {
+				if (y <= starty + diam) y++;
+				if (y == starty + diam) {
+					diam += 2;
+					x = startx - diam - 1;
+					y = starty - diam - 1;
+				} else {
+					x -= diam - 1;
+				}
+			}
+			if (x < 2) x = 2;
+			if (y < 1) y = 1;
+		}
+		Jump.player.x = (x << 4);
+		Jump.player.y = (y << 4);
+		Jump.player.voidAvoid = false;
+	}
+
 	public double getTileVal(int x, int y) {
 		return tiles[x + y * width];
 	}
@@ -429,10 +392,5 @@ public class Level {
 
 	public boolean getHot() {
 		return hot;
-	}
-	
-	public void closeStore() {
-		store = tiles.clone();
-		tiles = tilesSave.clone();
 	}
 }

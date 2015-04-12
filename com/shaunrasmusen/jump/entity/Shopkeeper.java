@@ -7,7 +7,8 @@ import com.shaunrasmusen.jump.render.texture.Sprite;
 
 public class Shopkeeper {
 
-	public double x = 225, y = 200, x0, x1, y0, y1, xa, ya;
+	public double x = 225, y = 200, xa, ya;
+	public int x0, x1, y0, y1;
 
 	Sprite sprite;
 	Random random = new Random();
@@ -46,10 +47,10 @@ public class Shopkeeper {
 			moveDir = random.nextInt(4);
 		}
 
-		x0 = x + 5;
-		x1 = x + 11;
-		y0 = y + 14;
-		y1 = y + 15;
+		x0 = (int) x + 5;
+		x1 = (int) x + 11;
+		y0 = (int) y + 14;
+		y1 = (int) y + 15;
 
 		ya = 0;
 		xa = 0;
@@ -93,7 +94,19 @@ public class Shopkeeper {
 		else
 			anim = 0;
 
-		checkCollisions();
+		// Collisions w/ solid blocks
+				if (Jump.store.getTile(x0 >> 4, (y0 - 1) >> 4).isSolid()) {
+					if (ya < 0) ya = 0;
+				}
+				if (Jump.store.getTile((x0 - 1) >> 4, y0 >> 4).isSolid()) {
+					if (xa < 0) xa = 0;
+				}
+				if (Jump.store.getTile(x1 >> 4, (y1 + 1) >> 4).isSolid()) {
+					if (ya > 0) ya = 0;
+				}
+				if (Jump.store.getTile((x1 + 1) >> 4, y1 >> 4).isSolid()) {
+					if (xa > 0) xa = 0;
+				}
 
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
@@ -144,24 +157,6 @@ public class Shopkeeper {
 
 		sprite.renderSprite((int) x, (int) y, 0);
 		Sprite.info.renderSprite((int) x + 4, (int) y - 10, 0);
-	}
-
-	public void checkCollisions() {
-		// Collisions w/ solid blocks
-		if (Jump.level.getTile((int) x0 >> 4, (int) (y0 - 1) >> 4).isSolid()) {
-			if (ya < 0) ya = 0;
-		}
-		if (Jump.level.getTile((int) (x0 - 1) >> 4, (int) y0 >> 4).isSolid()) {
-			if (xa < 0) xa = 0;
-		}
-		if (Jump.level.getTile((int) x1 >> 4, (int) (y1 + 1) >> 4).isSolid()) {
-			if (ya > 0) ya = 0;
-			if (moveTimer < 50) moveDir = 0;
-		}
-		if (Jump.level.getTile((int) (x1 + 1) >> 4, (int) y1 >> 4).isSolid()) {
-			if (xa > 0) xa = 0;
-			if (moveTimer < 50) moveDir = 3;
-		}
 	}
 
 	public int getDir() {

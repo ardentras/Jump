@@ -142,6 +142,8 @@ public class Sprite {
 	public static Sprite tileBreak5 = new Sprite(5, 7, 16, 16, "tiles");
 	public static Sprite tileBreak6 = new Sprite(6, 7, 16, 16, "tiles");
 	
+	public static Sprite atm = new Sprite(13, 1, 16, 16, "tiles");
+	
 	public Sprite(double x, double y, double width, double height, String sheet) {
 		this.x = x;
 		this.y = y;

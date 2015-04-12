@@ -14,7 +14,6 @@ public class Effects {
 	public int sightDist = 0, usingSight = -1, usingHeal = -1;
 	private int keyWait = 0;
 	public boolean runningSight = false;
-	public boolean voidAvoid = false;
 	private boolean regen;
 	private double heal = 0;
 	
@@ -51,7 +50,7 @@ public class Effects {
 		keyWait++;
 		
 		// Yo, dude. This is where the side sprites are rendered, mmkay???
-		if (voidAvoid) Sprite.jetpack.renderSprite(1, 10 * 2, 0);
+		if (Jump.player.voidAvoid) Sprite.jetpack.renderSprite(1, 10 * 2, 0);
 		if (Jump.player.lavaDamage == 0.5)
 			Sprite.fire0.renderSprite(1, 10 * 3, 0);
 		if (Jump.player.lavaDamage == 0.25)
@@ -89,7 +88,7 @@ public class Effects {
 		if (e == 3.0) Jump.timer += 300;
 		if (e == 3.1) Jump.timer += 600;
 		if (e == 3.2) Jump.timer += 900;
-		if (e == 4.0) voidAvoid = true;
+		if (e == 4.0) Jump.player.voidAvoid = true;
 		if (e == 5.0) {
 			Jump.player.lavaDamage = 0.5;
 			lavaDamageTimer = 15 * 60;
@@ -296,41 +295,12 @@ public class Effects {
 				Jump.player.inventoryFull = true;
 			} else {
 				if (e >= 3) Jump.player.inventory[j] = e;
-				Jump.level.shopSprite[i] = 0;
-				Jump.level.shopSprite[i + 1] = -1;
-				Jump.level.shopSprite[i + 2] = -1;
+				Jump.store.storeSprite[i] = 0;
+				Jump.store.storeSprite[i + 1] = -1;
+				Jump.store.storeSprite[i + 2] = -1;
 			}
 		}
 		Jump.player.money = money;
 		Jump.player.health = health;
-	}
-	
-	public void findTileCirc() {
-		int diam = 2;
-		int startx = (int) (Jump.player.x) >> 4;
-		int starty = (int) (Jump.player.y) >> 4;
-		int x = startx - 1;
-		int y = starty - 1;
-		if (x < 2) x = 2;
-		if (y < 1) y = 1;
-		
-		while (Jump.level.getTileVal(x, y) > 4.0 || Jump.level.getTileVal(x, y) < 1.9) {
-			if (x <= startx + diam) x++;
-			if (x == startx + diam) {
-				if (y <= starty + diam) y++;
-				if (y == starty + diam) {
-					diam += 2;
-					x = startx - diam - 1;
-					y = starty - diam - 1;
-				} else {
-					x -= diam - 1;
-				}
-			}
-			if (x < 2) x = 2;
-			if (y < 1) y = 1;
-		}
-		Jump.player.x = (x << 4);
-		Jump.player.y = (y << 4);
-		voidAvoid = false;
 	}
 }
