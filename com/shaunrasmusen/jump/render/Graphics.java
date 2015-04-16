@@ -11,6 +11,7 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.ResourceLoader;
 
 import com.shaunrasmusen.jump.Jump;
+import com.shaunrasmusen.jump.effect.Effect;
 import com.shaunrasmusen.jump.render.texture.Sprite;
 
 public class Graphics {
@@ -97,7 +98,7 @@ public class Graphics {
 		Sprite.healthBar2.renderSprite(11, 0, 0);
 		Sprite.healthBar3.renderSprite(12, 0, 0);
 		Sprite.healthBar4.renderSprite(13, 0, 0);
-
+		
 		double totalHealth = health;
 		if (health > Jump.player.maxHealth) health = Jump.player.maxHealth;
 		
@@ -117,7 +118,7 @@ public class Graphics {
 		GL11.glLoadIdentity();
 
 		noScale();
-
+		
 		if (totalHealth > health) {
 			for (int i = 0; i < (int) (totalHealth - health) / 5; i++) {
 				Sprite.heartPlus.renderSprite(442 + (i * 10), 38, 0);
@@ -130,8 +131,7 @@ public class Graphics {
 		fontsmall.drawString(3, 1, "_____");
 		fontsmall.drawString((30) - (fontsmall.getWidth(money + "cr") / 2), 22, money + "cr");
 		
-		if ((Jump.level.getTileVal((Jump.player.x0 + 3) >> 4, Jump.player.y1 >> 4) == 3.1
-				|| Jump.level.getTileVal((Jump.player.x1 - 3) >> 4, Jump.player.y1 >> 4) == 3.1)) {
+		if ((Jump.level.getTileVal((Jump.player.x0 + 3) >> 4, Jump.player.y1 >> 4) == 3.1 || Jump.level.getTileVal((Jump.player.x1 - 3) >> 4, Jump.player.y1 >> 4) == 3.1)) {
 			infoHelp++;
 			if (infoHelp > 250) {
 				Graphics.fonttiny.drawString(Display.getWidth() - Graphics.fonttiny.getWidth("Press LShift to teleport "),
@@ -231,149 +231,15 @@ public class Graphics {
 		}
 	}
 
-	public static void drawShopItemInfo(double i, int epx, int epy) {
-		epx = epx * 48;
-		epy = epy * 48;
-
+	public static void drawItemInfo(Effect effect) {
 		noScale();
-		switch ((int) i) {
-		case 1:
-			if (i == 1.0) {
-				fontsmall.drawString(100, 720, "Small Health Additive");
-				fonttiny.drawString(100, 740, "50cr");
-				fonttiny.drawString(100, 756, "Adds 25hp temporarily to max health. Once lost, cannot be regenerated without re-purchase.");
-				fonttiny.drawString(100, 772, "(*Note: Only effective when already at max health)");
-			}
-			if (i == 1.1) {
-				fontsmall.drawString(100, 720, "Medium Health Additive");
-				fonttiny.drawString(100, 740, "75cr");
-				fonttiny.drawString(100, 756, "Adds 50hp temporarily to max health. Once lost, cannot be regenerated without re-purchase.");
-				fonttiny.drawString(100, 772, "(*Note: Only effective when already at max health)");
-			}
-			if (i == 1.2) {
-				fontsmall.drawString(100, 720, "Large Health Additive");
-				fonttiny.drawString(100, 740, "100cr");
-				fonttiny.drawString(100, 756, "Adds 75hp temporarily to max health. Once lost, cannot be regenerated without re-purchase.");
-				fonttiny.drawString(100, 772, "(*Note: Only effective when already at max health)");
-			}
-			break;
-		case 2:
-			if (i == 2.0) {
-				fontsmall.drawString(100, 720, "1 Small Health Canister");
-				fonttiny.drawString(100, 740, "25cr");
-				fonttiny.drawString(100, 756, "Gives you a single canister that instantly heals 10hp.");
-			}
-			if (i == 2.1) {
-				fontsmall.drawString(100, 720, "2 Small Health Canisters, +50% bonus");
-				fonttiny.drawString(100, 740, "50cr");
-				fonttiny.drawString(100, 756, "Gives you two canisters that instantly heal 10hp each, plus an added bonus of 5hp!");
-			}
-			if (i == 2.2) {
-				fontsmall.drawString(100, 720, "3 Medium Health Canisters");
-				fonttiny.drawString(100, 740, "100cr");
-				fonttiny.drawString(100, 756, "Denser health canisters that each instantly heal for 25hp.");
-			}
-			if (i == 2.3) {
-				fontsmall.drawString(100, 720, "Large Health Canister");
-				fonttiny.drawString(100, 740, "200cr");
-				fonttiny.drawString(100, 756, "Instantly heals you to full health.");
-			}
-			break;
-		case 3:
-			if (i == 3.0) {
-				fontsmall.drawString(100, 720, "Basic Time Manipulation Device");
-				fonttiny.drawString(100, 740, "75cr");
-				fonttiny.drawString(100, 756, "Warps you 5 seconds into the past, while keeping your position constant.");
-				fonttiny.drawString(100, 772, "Can only be applied once per level to avoid unwanted space-time distortion.");
-			}
-			if (i == 3.1) {
-				fontsmall.drawString(100, 720, "Standard Time Manipulation Device");
-				fonttiny.drawString(100, 740, "150cr");
-				fonttiny.drawString(100, 756, "Warps you 10 seconds into the past, while keeping your position constant.");
-				fonttiny.drawString(100, 772, "Can only be applied once per level to avoid unwanted space-time distortion.");
-			}
-			if (i == 3.2) {
-				fontsmall.drawString(100, 720, "Advanced Time Manipulation Device");
-				fonttiny.drawString(100, 740, "250cr");
-				fonttiny.drawString(100, 756, "Warps you 15 seconds into the past, while keeping your position constant.");
-				fonttiny.drawString(100, 772, "Can only be applied once per level to avoid unwanted space-time distortion.");
-			}
-			break;
-		case 4:
-			if (i == 4.0) {
-				fontsmall.drawString(100, 720, "The \"Void-Avoidance 9000\"");
-				fonttiny.drawString(100, 740, "300cr");
-				fonttiny.drawString(100, 756, "Activates automatically by detecting distress with state-of-the-art technology.");
-				fonttiny.drawString(100, 772, "Pilots you to the nearest safe platform, thereby allowing you to narrowly avoid");
-				fonttiny.drawString(100, 788, "a most unfortunate death.");
-			}
-			break;
-		case 5:
-			if (i == 5.0) {
-				fontsmall.drawString(100, 720, "Basic Lava Protection");
-				fonttiny.drawString(100, 740, "100cr");
-				fonttiny.drawString(100, 756, "Can be activated at any time in order to create protection from the heat of lava.");
-				fonttiny.drawString(100, 772, "Will reduce damage from lava by 50% for 15 seconds.");
-			}
-			if (i == 5.1) {
-				fontsmall.drawString(100, 720, "Standard Lava Protection");
-				fonttiny.drawString(100, 740, "250cr");
-				fonttiny.drawString(100, 756, "Can be activated at any time in order to create protection from the heat of lava.");
-				fonttiny.drawString(100, 772, "Will reduce damage from lava by 75% for 30 seconds.");
-			}
-			if (i == 5.2) {
-				fontsmall.drawString(100, 720, "Advanced Lava Protection");
-				fonttiny.drawString(100, 740, "400cr");
-				fonttiny.drawString(100, 756, "Can be activated at any time in order to create protection from the heat of lava.");
-				fonttiny.drawString(100, 772, "Will reduce damage from lava entirely for 30 seconds.");
-			}
-			break;
-		case 6:
-			if (i == 6.0) {
-				fontsmall.drawString(100, 720, "Standard Gravitational Field Enhancement");
-				fonttiny.drawString(100, 740, "200cr");
-				fonttiny.drawString(100, 756, "Increases RoE of your gravitational field by one tile when laboratory gravity is decreased.");
-				fonttiny.drawString(100, 772, "Can be activated and deactivated at any time over 30 seconds.");
-			}
-			if (i == 6.1) {
-				fontsmall.drawString(100, 720, "Advanced Gravitational Field Enhancement");
-				fonttiny.drawString(100, 740, "350cr");
-				fonttiny.drawString(100, 756, "Increases RoE of your gravitational field by three tiles when laboratory gravity is decreased.");
-				fonttiny.drawString(100, 772, "Can be activated and deactivated at any time over 30 seconds.");
-			}
-			break;
-		case 7:
-			if (i == 7.0) {
-				fontsmall.drawString(100, 720, "In-Level Teleport");
-				fonttiny.drawString(100, 740, "750cr");
-				fonttiny.drawString(100, 756, "Will teleport the player a random distance forward upon activation.");
-				fonttiny.drawString(100, 772, "Guaranteed at least a three block diagonal teleport and safe arrival on a");
-				fonttiny.drawString(100, 788, "non-damaging tile.");
-			}
-			break;
-		case 8:
-			if (i == 8.0) {
-				fontsmall.drawString(100, 720, "Box of 25,000 Medical Nano-bots");
-				fonttiny.drawString(100, 740, "100cr");
-				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that are capable of healing for a total of");
-				fonttiny.drawString(100, 772, "50hp. Slow working, lower quality bots that will complete the task in a");
-				fonttiny.drawString(100, 788, "minimum 20s, but these are offered at an unbeatable price. ");
-			}
-			if (i == 8.1) {
-				fontsmall.drawString(100, 720, "Box of 50,000 Medical Nano-bots");
-				fonttiny.drawString(100, 740, "300cr");
-				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that are capable of healing for a total of");
-				fonttiny.drawString(100, 772, "100hp. Faster working, standard medical bots that can heal within 15s.");
-			}
-			if (i == 8.2) {
-				fontsmall.drawString(100, 720, "Box of 100,000 Medical Nano-bots");
-				fonttiny.drawString(100, 740, "500cr");
-				fonttiny.drawString(100, 756, "Toggleable medical nano-bots that will fully regenerate 150hp over the span of a");
-				fonttiny.drawString(100, 772, "minimum 10s. Despite the high cost, they are very effective. Guaranteed you won't");
-				fonttiny.drawString(100, 788, "regret the purchase!");
-			}
-			break;
-		}
+		fontsmall.drawString(100, 720, effect.name);
+		fonttiny.drawString(100, 740, effect.cost + "cr");
+		fonttiny.drawString(100, 756, effect.descr0);
+		if (effect.descr1 != null)
+			fonttiny.drawString(100, 772, effect.descr1);
+		if (effect.descr2 != null)
+			fonttiny.drawString(100, 788, effect.descr2);
 		
 		fullScale();
 	}

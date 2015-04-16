@@ -120,7 +120,7 @@ public class Level {
 		// Void
 		if (getTileVal((x0 + 3) >> 4, y1 >> 4) == 1.0 || getTileVal((x1 - 3) >> 4, y1 >> 4) == 1.0) {
 			if (Jump.player.voidAvoid) {
-				findTileCirc();
+				Jump.player.findTileCirc();
 			} else {
 				health = 0;
 				Jump.voidDeath = true;
@@ -137,8 +137,7 @@ public class Level {
 			onStore = true;
 		}
 
-		if (getTileVal((x0 + 3) >> 4, y1 >> 4) != 3.2
-				|| getTileVal((x1 - 3) >> 4, y1 >> 4) != 3.2) {
+		if (getTileVal((x0 + 3) >> 4, y1 >> 4) != 3.2 || getTileVal((x1 - 3) >> 4, y1 >> 4) != 3.2) {
 			onStore = false;
 		}
 
@@ -211,20 +210,6 @@ public class Level {
 			else if (xa < 0) setTileVal((x0 + 3) >> 4, y1 >> 4, 2.0);
 			else
 				setTileVal(((x0 + x1) / 2) >> 4, y1 >> 4, 2.0);
-		}
-
-		// Collisions w/ solid blocks
-		if (getTile(x0 >> 4, (y0 - 1) >> 4).isSolid()) {
-			if (ya < 0) ya = 0;
-		}
-		if (getTile((x0 - 1) >> 4, y0 >> 4).isSolid()) {
-			if (xa < 0) xa = 0;
-		}
-		if (getTile(x1 >> 4, (y1 + 1) >> 4).isSolid()) {
-			if (ya > 0) ya = 0;
-		}
-		if (getTile((x1 + 1) >> 4, y1 >> 4).isSolid()) {
-			if (xa > 0) xa = 0;
 		}
 
 		Jump.player.health = health;
@@ -351,35 +336,6 @@ public class Level {
 		if (tiles[x + y * width] == 1.0) return voidTile0;
 
 		return nullTile;
-	}
-
-	public void findTileCirc() {
-		int diam = 2;
-		int startx = (int) (Jump.player.x) >> 4;
-		int starty = (int) (Jump.player.y) >> 4;
-		int x = startx - 1;
-		int y = starty - 1;
-		if (x < 2) x = 2;
-		if (y < 1) y = 1;
-
-		while (Jump.level.getTileVal(x, y) > 4.0 || Jump.level.getTileVal(x, y) < 1.9) {
-			if (x <= startx + diam) x++;
-			if (x == startx + diam) {
-				if (y <= starty + diam) y++;
-				if (y == starty + diam) {
-					diam += 2;
-					x = startx - diam - 1;
-					y = starty - diam - 1;
-				} else {
-					x -= diam - 1;
-				}
-			}
-			if (x < 2) x = 2;
-			if (y < 1) y = 1;
-		}
-		Jump.player.x = (x << 4);
-		Jump.player.y = (y << 4);
-		Jump.player.voidAvoid = false;
 	}
 
 	public double getTileVal(int x, int y) {

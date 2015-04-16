@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
+import com.shaunrasmusen.jump.effect.Effect;
 import com.shaunrasmusen.jump.entity.Player;
 import com.shaunrasmusen.jump.entity.Shopkeeper;
 import com.shaunrasmusen.jump.input.Keys;
@@ -43,12 +44,13 @@ public class Jump {
 	public static Shopkeeper shopkeeper;
 	public static Keys keys;
 	public static Sound ingame, ingameChords, jumpElec, teleport;
+	public static Effect effect;
 	
 	public static boolean timerDeath = false, lavaDeath = false, voidDeath = false;
 
 	private int musicTimer = 5001;
 	private int pausedWait = 0;
-	private int lDefault = 1, l;
+	private int lDefault = 1, l = 1;
 	private boolean reset = false;
 	private boolean hot = false;
 	
@@ -62,6 +64,7 @@ public class Jump {
 
 	public void start() {
 		createEnvironment();
+		effect = new Effect();
 		
 //		Menu menu = new Menu();
 //		menu.start();
@@ -155,7 +158,6 @@ public class Jump {
 		player.render();
 		shopkeeper.render();
 		Graphics.renderShopInfo(player.money, player.health);
-		player.renderInv();
 		
 		Display.update();
 	}
@@ -171,7 +173,6 @@ public class Jump {
 		level.render();
 		Graphics.renderGameInfo((int) player.dist, player.health, player.money, player.x, player.y, l, timer / 60);
 		player.render();
-		player.renderInv();
 
 		if (level.tiles[level.width - 1 + (level.height - 1) * level.width] != 3.0) timer--;
 		if (timer <= 0) {
@@ -310,7 +311,9 @@ public class Jump {
 			player.health = Double.parseDouble(br.readLine());
 			player.money = Integer.parseInt(br.readLine());
 			for (int i = 0; i < 6; i++) {
-				player.inventory[i] = Double.parseDouble(br.readLine());
+				double d = Double.parseDouble(br.readLine());
+				if (d > 0)
+					player.inventory[i] = effect.getEffect(d);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -344,7 +347,10 @@ public class Jump {
 				write.write(Integer.toString(player.money));
 				for (int i = 0; i < 6; i++) {
 					write.newLine();
-					write.write(Double.toString(player.inventory[i]));
+					if (player.inventory[i] != null)
+						write.write(Double.toString(player.inventory[i].id));
+					else
+						write.write("0");
 				}
 				write.close();
 			}
